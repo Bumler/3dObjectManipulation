@@ -145,17 +145,13 @@ public class Cube extends Polygon{
 				coordinate d = cordList.get(faceList.get(i).get(3));
 
 //				//creates two vectors in the correct form
-//				vector u = new vector(a, b);
-//				vector v = new vector(a,c);
-//				
-//				//computes the cross product
-//				int[] cross = u.cross(v);
-//				vector normal = new  vector();
-//				normal.addPoint(a.getX(), a.getY(), a.getZ());
-//				normal.addPoint(cross[0], cross[1], cross[2]);
-//				
-//				//we must now convert the normal into a unit vector
-//				normal.shrink();
+				vector u = new vector(a, b);
+				vector v = new vector(a,c);
+				
+				//computes the cross product
+				
+				//we must now convert the normal into a unit vector
+				//normal.shrink();
 				
 				//now we translate the normal to the center
 				
@@ -163,13 +159,20 @@ public class Cube extends Polygon{
 				//if that is behind the center of the cube (when adjusted to 0 z) we don't render it 
 				double centerZ = (a.getZ() + b.getZ() + c.getZ() + d.getZ())/4;
 				centerZ = centerZ + (-1*this.getDepth());
-				if (centerZ > 0){
+				//we do point .1 to account for some float cutoff
+				if (centerZ > .1){
 					//we create an array of x's and y's from our four points and then draw them as a square
 					int x[] = {(int)a.getX(), (int)b.getX(), (int)c.getX(), (int)d.getX()};
 					int y[] = {(int)a.getY(), (int)b.getY(), (int)c.getY(), (int)d.getY()};
 					g2d.setColor(colorList.get(i));
-					//normal.render(g2d);
 					g2d.fillPolygon(x, y, 4);
+					int[] cross = u.cross(v);
+					vector normal = new  vector();
+					float centerX = (a.getX() + b.getX() + c.getX() + d.getX())/4;
+					float centerY = (a.getY() + b.getY() + c.getY() + d.getY())/4;
+					normal.addPoint((int)centerX, (int)centerY, (int)centerZ);
+					normal.addPoint(cross[0], cross[1], cross[2]);
+					normal.render(g2d);
 				}
 			}
 		}
