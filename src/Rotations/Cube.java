@@ -1,5 +1,6 @@
 package Rotations;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 public class Cube extends Polygon{
 	ArrayList<int[]> edgeList = new ArrayList<int[]>();
 	ArrayList<ArrayList<Integer>> faceList = new ArrayList<ArrayList<Integer>>();
+	ArrayList<Color> colorList = new ArrayList<Color>();
 	boolean init = false;
 	
 	public Cube (){
@@ -90,7 +92,7 @@ public class Cube extends Polygon{
 	                	String[] cords = line.split(", ");
 	                	ArrayList<Integer> face = new ArrayList<Integer>();
 	                	for (int i = 0; i < cords.length; i++){
-	                		face.add(Integer.parseInt(cords[0]));
+	                		face.add(Integer.parseInt(cords[i]));
 	                	}
 	                	faceList.add(face);
 	                }
@@ -112,6 +114,12 @@ public class Cube extends Polygon{
 	            // Or we could just do this: 
 	            // ex.printStackTrace();
 	        }
+	        	colorList.add(Color.red);
+	        	colorList.add(Color.white);
+	        	colorList.add(Color.blue);
+	        	colorList.add(Color.cyan);
+	        	colorList.add(Color.yellow);
+	        	colorList.add(Color.green);
 	}
 	
 	public void erase(){
@@ -120,18 +128,49 @@ public class Cube extends Polygon{
 		edgeList = new ArrayList<int[]>();
 	}
 	
+	//this method returns the 'depth' of the object, meaning how far in front of the z axis it is
+	public float getDepth(){
+		float depth = this.center.getZ();
+		return depth;
+	}
+	
 	public void render (Graphics2D g2d){
 		if (init){
-			for (int i = 0; i < faceList.size(); i++){
+			//we go through each line in the face list drawing squares in ways that appear to be cubelike
+			for (int i = 0; i < faceList.size(); i++){		
+				//each coordinate is a different point on a line from the face list
 				coordinate a = cordList.get(faceList.get(i).get(0));
 				coordinate b = cordList.get(faceList.get(i).get(1));
 				coordinate c = cordList.get(faceList.get(i).get(2));
 				coordinate d = cordList.get(faceList.get(i).get(3));
-				System.out.println(faceList.get(i).get(0)+ " " +faceList.get(i).get(1)+ " "+faceList.get(i).get(2)+" " +faceList.get(i).get(3));
-				System.out.println(a+"    "+b+"    "+c+"    "+d);
-				int x[] = {(int)a.getX(), (int)b.getX(), (int)c.getX(), (int)d.getX()};
-				int y[] = {(int)a.getY(), (int)b.getY(), (int)c.getY(), (int)d.getY()};
-				g2d.fillPolygon(x, y, 4);
+
+//				//creates two vectors in the correct form
+//				vector u = new vector(a, b);
+//				vector v = new vector(a,c);
+//				
+//				//computes the cross product
+//				int[] cross = u.cross(v);
+//				vector normal = new  vector();
+//				normal.addPoint(a.getX(), a.getY(), a.getZ());
+//				normal.addPoint(cross[0], cross[1], cross[2]);
+//				
+//				//we must now convert the normal into a unit vector
+//				normal.shrink();
+				
+				//now we translate the normal to the center
+				
+				//what this project currently does to handle hidden surface removal is check the z of the center of the face
+				//if that is behind the center of the cube (when adjusted to 0 z) we don't render it 
+				double centerZ = (a.getZ() + b.getZ() + c.getZ() + d.getZ())/4;
+				centerZ = centerZ + (-1*this.getDepth());
+				if (centerZ > 0){
+					//we create an array of x's and y's from our four points and then draw them as a square
+					int x[] = {(int)a.getX(), (int)b.getX(), (int)c.getX(), (int)d.getX()};
+					int y[] = {(int)a.getY(), (int)b.getY(), (int)c.getY(), (int)d.getY()};
+					g2d.setColor(colorList.get(i));
+					//normal.render(g2d);
+					g2d.fillPolygon(x, y, 4);
+				}
 			}
 		}
 	}

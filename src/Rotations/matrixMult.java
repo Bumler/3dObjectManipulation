@@ -39,6 +39,7 @@ public class matrixMult {
 	}
 
 	public static Cube rotateArbitrary(Cube c, float angle, coordinate axis) {
+		System.out.println("HELLO");
 		coordinate P = c.getCenter();
 
 		Cube result = new Cube();

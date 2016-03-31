@@ -140,6 +140,7 @@ public class graphicsPanelV extends JPanel {
 	}
 	
 	public void arbitraryRotation (coordinate cord, int angle){
+		System.out.println("ITS ME");
 		shape = matrixMult.rotateArbitrary(shape, angle, cord);
 		repaint();
 	}

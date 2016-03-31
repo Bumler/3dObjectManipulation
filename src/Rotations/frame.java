@@ -132,6 +132,7 @@ public class frame extends JFrame {
 		JPanel blankC = new JPanel();
 		btnPanel.add(blankC);
 		
+		///the action listeners for scale and translate aren't with the buttons themselves because they need the input of the arb axes
 		JButton btnScale = new JButton("Scale");
 		btnPanel.add(btnScale);
 		
@@ -158,12 +159,13 @@ public class frame extends JFrame {
 		
 		btnArbitrary.addActionListener(new ActionListener(){
 			public void actionPerformed (ActionEvent arg0){
+				System.out.println("somebody help me");
 				gPane.arbitraryRotation(new coordinate(Float.parseFloat(arbX.getText()), Float.parseFloat(arbY.getText()), Float.parseFloat(arbZ.getText())), Integer.parseInt(angleInput.getText()));
 			}
 		});
-		///the action listeners for scale and translate aren't with the buttons themselves because they need the input of the arb axes
 		btnScale.addActionListener(new ActionListener(){
 			public void actionPerformed (ActionEvent arg0){
+				System.out.println("hai boi");
 				gPane.scale(Float.parseFloat(arbX.getText()), Float.parseFloat(arbY.getText()), Float.parseFloat(arbZ.getText()));
 			}
 		});
