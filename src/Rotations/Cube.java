@@ -146,7 +146,7 @@ public class Cube extends Polygon{
 
 //				//creates two vectors in the correct form
 				vector u = new vector(a, b);
-				vector v = new vector(a,c);
+				vector v = new vector(a,d);
 				
 				//computes the cross product
 				
@@ -168,10 +168,11 @@ public class Cube extends Polygon{
 					g2d.fillPolygon(x, y, 4);
 					int[] cross = u.cross(v);
 					vector normal = new  vector();
-					float centerX = (a.getX() + b.getX() + c.getX() + d.getX())/4;
-					float centerY = (a.getY() + b.getY() + c.getY() + d.getY())/4;
-					normal.addPoint((int)centerX, (int)centerY, (int)centerZ);
-					normal.addPoint(cross[0], cross[1], cross[2]);
+					int centerX = (int) ((a.getX() + b.getX() + c.getX() + d.getX())/4);
+					int centerY = (int) ((a.getY() + b.getY() + c.getY() + d.getY())/4);
+					normal.addPoint(centerX, centerY, (int)centerZ);
+					
+					normal.addPoint(cross[0] + centerX, cross[1] + centerY, cross[2]+ (int)centerZ);
 					normal.render(g2d);
 				}
 			}
