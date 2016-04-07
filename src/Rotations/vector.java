@@ -11,8 +11,8 @@ public class vector extends Point{
 	
 	public vector (coordinate c1, coordinate c2){
 		super();
-		this.addPoint((int)c1.getX(), (int)c1.getY(), (int)c1.getY());
-		this.addPoint((int)c2.getX(), (int)c2.getY(), (int)c2.getY());
+		this.addPoint((int)c1.getX(), (int)c1.getY(), (int)c1.getZ());
+		this.addPoint((int)c2.getX(), (int)c2.getY(), (int)c2.getZ());
 	}
 	
 	public void addPoint(int x, int y, int z){
@@ -81,9 +81,10 @@ public class vector extends Point{
 	
 	public void shrink(){
 		int dividend = this.magnitude();
-		vec[0] /= dividend;
-		vec[1] /= dividend;
-		vec[2] /= dividend;
+			cordList.get(1).setX(cordList.get(1).getX()/dividend);
+			cordList.get(1).setY(cordList.get(1).getY()/dividend);
+			cordList.get(1).setZ(cordList.get(1).getZ()/dividend);
+
 	}
 	//RENDER-----------------------------------------------------------
 	public void render (Graphics2D g2d){

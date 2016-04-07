@@ -136,6 +136,7 @@ public class Cube extends Polygon{
 	
 	public void render (Graphics2D g2d){
 		if (init){
+			ArrayList<Integer> spots = new ArrayList<Integer>();
 			//we go through each line in the face list drawing squares in ways that appear to be cubelike
 			for (int i = 0; i < faceList.size(); i++){		
 				//each coordinate is a different point on a line from the face list
@@ -160,22 +161,63 @@ public class Cube extends Polygon{
 				double centerZ = (a.getZ() + b.getZ() + c.getZ() + d.getZ())/4;
 				centerZ = centerZ + (-1*this.getDepth());
 				//we do point .1 to account for some float cutoff
-				if (centerZ > .1){
+				if (centerZ > 01){
+					spots.add(i);
+				}
+				
+				int[] cross = u.cross(v);
+				vector normal = new  vector();
+				int centerX = (int) ((a.getX() + b.getX() + c.getX() + d.getX())/4);
+				int centerY = (int) ((a.getY() + b.getY() + c.getY() + d.getY())/4);
+				normal.addPoint(centerX, centerY, (int)centerZ);	
+				normal.addPoint((cross[0] + centerX), (cross[1] + centerY), (cross[2] + (int)centerZ));
+
+				g2d.setColor(Color.BLACK);
+				normal.render(g2d);
+				
+			}
+			for (int j = 0; j < spots.size(); j++){
+				int i = spots.get(j);
+				//each coordinate is a different point on a line from the face list
+				coordinate a = cordList.get(faceList.get(i).get(0));
+				coordinate b = cordList.get(faceList.get(i).get(1));
+				coordinate c = cordList.get(faceList.get(i).get(2));
+				coordinate d = cordList.get(faceList.get(i).get(3));
+
+//				//creates two vectors in the correct form
+				vector u = new vector(a, b);
+				vector v = new vector(a,d);
+				
+				//computes the cross product
+				
+				//we must now convert the normal into a unit vector
+				//normal.shrink();
+				
+				//now we translate the normal to the center
+				
+				//what this project currently does to handle hidden surface removal is check the z of the center of the face
+				//if that is behind the center of the cube (when adjusted to 0 z) we don't render it 
+				double centerZ = (a.getZ() + b.getZ() + c.getZ() + d.getZ())/4;
+				centerZ = centerZ + (-1*this.getDepth());
+				//we do point .1 to account for some float cutoff
+				if (centerZ > 01){
 					//we create an array of x's and y's from our four points and then draw them as a square
 					int x[] = {(int)a.getX(), (int)b.getX(), (int)c.getX(), (int)d.getX()};
 					int y[] = {(int)a.getY(), (int)b.getY(), (int)c.getY(), (int)d.getY()};
 					g2d.setColor(colorList.get(i));
 					g2d.fillPolygon(x, y, 4);
-					int[] cross = u.cross(v);
-					vector normal = new  vector();
-					int centerX = (int) ((a.getX() + b.getX() + c.getX() + d.getX())/4);
-					int centerY = (int) ((a.getY() + b.getY() + c.getY() + d.getY())/4);
-					normal.addPoint(centerX, centerY, (int)centerZ);
-					
-					normal.addPoint(cross[0] + centerX, cross[1] + centerY, cross[2]+ (int)centerZ);
-					normal.render(g2d);
 				}
-			}
+				
+				int[] cross = u.cross(v);
+				vector normal = new  vector();
+				int centerX = (int) ((a.getX() + b.getX() + c.getX() + d.getX())/4);
+				int centerY = (int) ((a.getY() + b.getY() + c.getY() + d.getY())/4);
+				normal.addPoint(centerX, centerY, (int)centerZ);	
+				normal.addPoint((cross[0] + centerX), (cross[1] + centerY), (cross[2] + (int)centerZ));
+
+				g2d.setColor(Color.BLACK);
+				normal.render(g2d);
+		}
 		}
 	}
 }
