@@ -197,9 +197,18 @@ public class graphicsPanelV extends JPanel {
 	public void paint (Graphics g){
 		super.paint(g);
 		Graphics2D g2d = (Graphics2D)g;
-		
-		shape.render(g2d);
-		otherShape.render(g2d);
+		//checks which shape is has a great z in its center
+		//the shape 'further from the screen' is drawn first that way the closer one is drawn over
+		float d1 = shape.getDepth();
+		float d2 = otherShape.getDepth();
+		if (d1 > d2){	
+			otherShape.render(g2d);
+			shape.render(g2d);
+			}
+		else {
+			shape.render(g2d);
+			otherShape.render(g2d);
+		}
 		System.out.println("repaint?");
 	}
 	
