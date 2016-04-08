@@ -30,6 +30,7 @@ public class frame extends JFrame {
 	private JTextField arbY;
 	private JTextField arbZ;
 	Cube c = null;
+	Cube c2 = null;
 
 	/**
 	 * Launch the application.
@@ -203,7 +204,8 @@ public class frame extends JFrame {
 		btnReadFile.addActionListener(new ActionListener(){
 			public void actionPerformed (ActionEvent arg0){
 				c = new Cube("cube.txt");
-				gPane.fileRead(c);
+				c2 = new Cube("coolerCube.txt");
+				gPane.fileRead(c,c2);
 			}
 		});
 		

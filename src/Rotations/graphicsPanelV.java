@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 public class graphicsPanelV extends JPanel {
 	private Rotations.frame owner = null;
 	private Cube shape = new Cube();
+	private Cube otherShape = new Cube();
 	/**
 	 * Create the panel.
 	 */
@@ -19,6 +20,67 @@ public class graphicsPanelV extends JPanel {
 	public graphicsPanelV(Rotations.frame frame) {
 		// TODO Auto-generated constructor stub
 		owner = frame;
+		this.addMouseListener(new MouseListener(){
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+					int x = e.getX();
+					int y = e.getY();
+				if (e.getButton() == MouseEvent.BUTTON1) {
+					//on mouse click it takes the distance of both shapes centers from the mouse click
+					//the one that is closer is selected
+					coordinate shapePos = shape.getXY();
+					coordinate otherShapePos = otherShape.getXY();
+					double dist1 = (Math.sqrt(
+							((shapePos.getX() - x)* (shapePos.getX() - x)) 
+							+ ((shapePos.getY() - y) * ((shapePos.getY() -y)))
+							));
+					double dist2 = (Math.sqrt(
+							((otherShapePos.getX() - x)* (otherShapePos.getX() - x)) 
+							+ ((otherShapePos.getY() - y) * ((otherShapePos.getY() -y)))
+							));
+					System.out.println("dist1 "+dist1);
+					System.out.println("dist2 "+dist2);
+					if (dist1 < dist2){
+						System.out.println("check A");
+						shape.selected(true);
+						otherShape.selected(false);
+					}
+					else {
+						System.out.println("Check B");
+						shape.selected(false);
+						otherShape.selected(true);
+					}
+					repaint();
+				}
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 
 	public void erase(){
@@ -127,8 +189,9 @@ public class graphicsPanelV extends JPanel {
 		return null;
 	}
 	
-	public void fileRead(Cube c){
+	public void fileRead(Cube c, Cube c2){
 		shape = c;
+		otherShape = c2;
 		repaint();
 	}
 	public void paint (Graphics g){
@@ -136,6 +199,7 @@ public class graphicsPanelV extends JPanel {
 		Graphics2D g2d = (Graphics2D)g;
 		
 		shape.render(g2d);
+		otherShape.render(g2d);
 		System.out.println("repaint?");
 	}
 	

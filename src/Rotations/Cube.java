@@ -14,6 +14,7 @@ public class Cube extends Polygon{
 	ArrayList<ArrayList<Integer>> faceList = new ArrayList<ArrayList<Integer>>();
 	ArrayList<Color> colorList = new ArrayList<Color>();
 	boolean init = false;
+	boolean selected = false;
 	
 	public Cube (){
 		super();
@@ -27,6 +28,29 @@ public class Cube extends Polygon{
 	public Cube (float[][] list){
 		super();
 		newCoordinates(list);
+	}
+	
+	//sets the cube to be selected, by default no cube is selected
+	public void selected (boolean tf){
+		selected = tf;
+	}
+	
+	public coordinate getXY(){
+		int totalX = 0;
+		int totalY = 0;
+		for (int i = 0; i < faceList.size(); i++){		
+			//each coordinate is a different point on a line from the face list
+			coordinate a = cordList.get(faceList.get(i).get(0));
+			coordinate b = cordList.get(faceList.get(i).get(1));
+			coordinate c = cordList.get(faceList.get(i).get(2));
+			coordinate d = cordList.get(faceList.get(i).get(3));
+			
+			totalX += (int) ((a.getX() + b.getX() + c.getX() + d.getX())/4);
+			totalY += (int) ((a.getY() + b.getY() + c.getY() + d.getY())/4);
+		}
+		totalX /= faceList.size();
+		totalY /= faceList.size();
+		return new coordinate(totalX, totalY, 0);
 	}
 	
 	//file reading information found at
@@ -145,17 +169,6 @@ public class Cube extends Polygon{
 				coordinate c = cordList.get(faceList.get(i).get(2));
 				coordinate d = cordList.get(faceList.get(i).get(3));
 
-//				//creates two vectors in the correct form
-				vector u = new vector(a, b);
-				vector v = new vector(a,d);
-				
-				//computes the cross product
-				
-				//we must now convert the normal into a unit vector
-				//normal.shrink();
-				
-				//now we translate the normal to the center
-				
 				//what this project currently does to handle hidden surface removal is check the z of the center of the face
 				//if that is behind the center of the cube (when adjusted to 0 z) we don't render it 
 				double centerZ = (a.getZ() + b.getZ() + c.getZ() + d.getZ())/4;
@@ -165,13 +178,21 @@ public class Cube extends Polygon{
 					spots.add(i);
 				}
 				
+//				//creates two vectors in the correct form
+				vector u = new vector(a, b);
+				vector v = new vector(a,d);
+				
+				//computes cross
 				int[] cross = u.cross(v);
 				vector normal = new  vector();
+				//adds in the base of the vector (the common point and the location of the cross)
 				normal.addPoint(a.getX(),a.getY(),a.getZ());	
 				normal.addPoint((cross[0]), (cross[1]), (cross[2]));
 		
+				//scales them down to a unit vector and then enlarges them
 				normal.shrink();
 				
+				//translates normal to the center
 				int centerX = (int) ((a.getX() + b.getX() + c.getX() + d.getX())/4);
 				int centerY = (int) ((a.getY() + b.getY() + c.getY() + d.getY())/4);
 				normal.addToVector(new coordinate(centerX, centerY, (float)centerZ));
@@ -187,17 +208,6 @@ public class Cube extends Polygon{
 				coordinate b = cordList.get(faceList.get(i).get(1));
 				coordinate c = cordList.get(faceList.get(i).get(2));
 				coordinate d = cordList.get(faceList.get(i).get(3));
-
-//				//creates two vectors in the correct form
-				vector u = new vector(a, b);
-				vector v = new vector(a,d);
-				
-				//computes the cross product
-				
-				//we must now convert the normal into a unit vector
-				//normal.shrink();
-				
-				//now we translate the normal to the center
 				
 				//what this project currently does to handle hidden surface removal is check the z of the center of the face
 				//if that is behind the center of the cube (when adjusted to 0 z) we don't render it 
@@ -210,20 +220,36 @@ public class Cube extends Polygon{
 					int y[] = {(int)a.getY(), (int)b.getY(), (int)c.getY(), (int)d.getY()};
 					g2d.setColor(colorList.get(i));
 					g2d.fillPolygon(x, y, 4);
+					
+					//we make our line color black for the outline and the vector below
+					g2d.setColor(Color.BLACK);
+					//outlines the visible faces of the shape with black lines
+					if (selected){
+						g2d.drawLine((int)a.getX(), (int)a.getY(), (int)b.getX(), (int)b.getY());
+						g2d.drawLine((int)b.getX(), (int)b.getY(), (int)c.getX(), (int)c.getY());
+						g2d.drawLine((int)c.getX(), (int)c.getY(), (int)d.getX(), (int)d.getY());
+						g2d.drawLine((int)d.getX(), (int)d.getY(), (int)a.getX(), (int)a.getY());
+					}
 				}
 				
+//				//creates two vectors in the correct form
+				vector u = new vector(a, b);
+				vector v = new vector(a,d);
+				//computes cross
 				int[] cross = u.cross(v);
 				vector normal = new  vector();
+				//adds in the base of the vector (the common point and the location of the cross)
 				normal.addPoint(a.getX(),a.getY(),a.getZ());	
 				normal.addPoint((cross[0]), (cross[1]), (cross[2]));
 		
+				//scales them down to a unit vector and then enlarges them
 				normal.shrink();
 				
+				//translates normal to the center
 				int centerX = (int) ((a.getX() + b.getX() + c.getX() + d.getX())/4);
 				int centerY = (int) ((a.getY() + b.getY() + c.getY() + d.getY())/4);
 				normal.addToVector(new coordinate(centerX, centerY, (float)centerZ));
 
-				g2d.setColor(Color.BLACK);
 				normal.render(g2d);
 		}
 		}
