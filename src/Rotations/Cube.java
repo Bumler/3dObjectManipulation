@@ -167,10 +167,14 @@ public class Cube extends Polygon{
 				
 				int[] cross = u.cross(v);
 				vector normal = new  vector();
+				normal.addPoint(a.getX(),a.getY(),a.getZ());	
+				normal.addPoint((cross[0]), (cross[1]), (cross[2]));
+		
+				normal.shrink();
+				
 				int centerX = (int) ((a.getX() + b.getX() + c.getX() + d.getX())/4);
 				int centerY = (int) ((a.getY() + b.getY() + c.getY() + d.getY())/4);
-				normal.addPoint(centerX, centerY, (int)centerZ);	
-				normal.addPoint((cross[0] + centerX), (cross[1] + centerY), (cross[2] + (int)centerZ));
+				normal.addToVector(new coordinate(centerX, centerY, (float)centerZ));
 
 				g2d.setColor(Color.BLACK);
 				normal.render(g2d);
@@ -210,10 +214,14 @@ public class Cube extends Polygon{
 				
 				int[] cross = u.cross(v);
 				vector normal = new  vector();
+				normal.addPoint(a.getX(),a.getY(),a.getZ());	
+				normal.addPoint((cross[0]), (cross[1]), (cross[2]));
+		
+				normal.shrink();
+				
 				int centerX = (int) ((a.getX() + b.getX() + c.getX() + d.getX())/4);
 				int centerY = (int) ((a.getY() + b.getY() + c.getY() + d.getY())/4);
-				normal.addPoint(centerX, centerY, (int)centerZ);	
-				normal.addPoint((cross[0] + centerX), (cross[1] + centerY), (cross[2] + (int)centerZ));
+				normal.addToVector(new coordinate(centerX, centerY, (float)centerZ));
 
 				g2d.setColor(Color.BLACK);
 				normal.render(g2d);

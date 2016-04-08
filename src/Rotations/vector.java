@@ -56,6 +56,13 @@ public class vector extends Point{
 				+ Math.pow(vec[2], 2));
 	}
 	
+	public void addToVector (coordinate c){
+		for (int i = 0; i < cordList.size(); i++){
+			cordList.get(i).setX(cordList.get(i).getX() + c.getX());
+			cordList.get(i).setY(cordList.get(i).getY() + c.getY());
+			cordList.get(i).setZ(cordList.get(i).getZ() + c.getZ());
+		}
+	}
 	
 	public int angle(vector v2){
 		return (int)Math.toDegrees(Math.cos(
@@ -81,10 +88,11 @@ public class vector extends Point{
 	
 	public void shrink(){
 		int dividend = this.magnitude();
-			cordList.get(1).setX(cordList.get(1).getX()/dividend);
-			cordList.get(1).setY(cordList.get(1).getY()/dividend);
-			cordList.get(1).setZ(cordList.get(1).getZ()/dividend);
-
+		for (int i = 0; i < cordList.size(); i++){
+			cordList.get(i).setX((cordList.get(i).getX()/dividend)*10);
+			cordList.get(i).setY((cordList.get(i).getY()/dividend)*10);
+			cordList.get(i).setZ((cordList.get(i).getZ()/dividend)*10);
+		}
 	}
 	//RENDER-----------------------------------------------------------
 	public void render (Graphics2D g2d){
