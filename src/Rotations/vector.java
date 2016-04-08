@@ -49,8 +49,8 @@ public class vector extends Point{
 	}
 	
 	//VECTOR MATH below------------------------------------------------
-	public int magnitude(){
-		return (int)Math.sqrt(
+	public float magnitude(){
+		return (float) Math.sqrt(
 				Math.pow(vec[0], 2)
 				+ Math.pow(vec[1], 2) 
 				+ Math.pow(vec[2], 2));
@@ -87,7 +87,7 @@ public class vector extends Point{
 	}
 	
 	public void shrink(){
-		int dividend = this.magnitude();
+		float dividend = this.magnitude();
 		for (int i = 0; i < cordList.size(); i++){
 			cordList.get(i).setX((cordList.get(i).getX()/dividend)*10);
 			cordList.get(i).setY((cordList.get(i).getY()/dividend)*10);
