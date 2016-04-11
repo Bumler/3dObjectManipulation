@@ -85,11 +85,12 @@ public class graphicsPanelV extends JPanel {
 
 	public void erase(){
 		shape.erase();
+		otherShape.erase();
 		repaint();
 	}
 	
-	public void scale (float sX, float sY, float sZ){
-		float[][] vector = shape.getMatrix();
+	public void scale (float sX, float sY, float sZ, Cube c){
+		float[][] vector = c.getMatrix();
 		float[][] scale = {
 				{sX, 0, 0, 0} ,
 				{0, sY, 0, 0} ,
@@ -98,13 +99,13 @@ public class graphicsPanelV extends JPanel {
 		};
 		
 		float[][] product = matrixMult.multiply(scale, vector);
-		shape.newCoordinates(product);
-		shape.findCenter();
+		c.newCoordinates(product);
+		c.findCenter();
 		repaint();
 	}
 
-	public void translate (float tX, float tY, float tZ){
-		float[][] vector = shape.getMatrix();
+	public void translate (float tX, float tY, float tZ, Cube c){
+		float[][] vector = c.getMatrix();
 		float[][] translate = {
 				{1, 0, 0, tX} ,
 				{0, 1, 0, tY} ,
@@ -113,40 +114,39 @@ public class graphicsPanelV extends JPanel {
 		};
 		
 		float[][] product = matrixMult.multiply(translate, vector);
-		shape.newCoordinates(product);
-		shape.findCenter();
+		c.newCoordinates(product);
+		c.findCenter();
 		repaint();
 	}
 	
-	public void rotate(int modeXYZ, int modeRotate, int angle){
+	public void rotate(int modeXYZ, int modeRotate, int angle, Cube c){
 		System.out.println("check 2");
-		if(modeXYZ == 0 || modeRotate == 0 || angle == -1 || !shape.isDone){
+		if(modeXYZ == 0 || modeRotate == 0 || angle == -1 || !c.isDone){
 			return;
 		}		
 		
-		float[][] vector = shape.getMatrix();
-		float[][] affine = createArray(modeXYZ, angle);		
+		float[][] vector = c.getMatrix();
+		float[][] affine = createArray(modeXYZ, angle, c);		
 		if (modeRotate == 2){
-			float[][] trans = createArray(4, 0);
+			float[][] trans = createArray(4, 0, c);
 			float[][] product = matrixMult.multiply(trans, vector);
-			shape.newCoordinates(product);
-			vector = shape.getMatrix();
-			System.out.println(shape.getCenter());
+			c.newCoordinates(product);
+			vector = c.getMatrix();
 		}
 		
 		float[][] product = matrixMult.multiply(affine, vector);
-		shape.newCoordinates(product);
+		c.newCoordinates(product);
 		
 		if (modeRotate == 2){
-			float[][] trans = createArray(5, 0);
-			float[][] tProduct = matrixMult.multiply(trans, shape.getMatrix());
-			shape.newCoordinates(tProduct);
+			float[][] trans = createArray(5, 0, c);
+			float[][] tProduct = matrixMult.multiply(trans, c.getMatrix());
+			c.newCoordinates(tProduct);
 		}
 			
 		repaint();
 	}
 	
-	public float[][] createArray(int mode, int angle){
+	public float[][] createArray(int mode, int angle, Cube c){
 		double rad = Math.toRadians(angle);
 		System.out.println("check 3");
 		switch(mode){
@@ -173,16 +173,16 @@ public class graphicsPanelV extends JPanel {
 			return rotMatrixZ;
 		case 4://creates a translation array to move by the center point
 			float[][]negTrans = {
-					{1, 0, 0, -1*(shape.getCenter().getX())},
-					{0, 1, 0, -1*(shape.getCenter().getY())},
-					{0, 0, 1, -1*(shape.getCenter().getZ())},
+					{1, 0, 0, -1*(c.getCenter().getX())},
+					{0, 1, 0, -1*(c.getCenter().getY())},
+					{0, 0, 1, -1*(c.getCenter().getZ())},
 					{0, 0, 0, 1}};
 			return negTrans;
 		case 5://creates a translation array it back
 			float[][]posTrans = {
-					{1, 0, 0, (shape.getCenter().getX())},
-					{0, 1, 0, (shape.getCenter().getY())},
-					{0, 0, 1, (shape.getCenter().getZ())},
+					{1, 0, 0, (c.getCenter().getX())},
+					{0, 1, 0, (c.getCenter().getY())},
+					{0, 0, 1, (c.getCenter().getZ())},
 					{0, 0, 0, 1}};
 			return posTrans;
 		}
@@ -214,13 +214,16 @@ public class graphicsPanelV extends JPanel {
 	
 	public void arbitraryRotation (coordinate cord, int angle){
 		System.out.println("ITS ME");
-		shape = matrixMult.rotateArbitrary(shape, angle, cord);
+		if (shape.isSelected())
+			shape = matrixMult.rotateArbitrary(shape, angle, cord);
+		else if (otherShape.isSelected())
+			otherShape = matrixMult.rotateArbitrary(otherShape, angle, cord);
 		repaint();
 	}
 	
 	public void animate(int modeXYZ, int modeRotate, int angle){
-		scale(50,50,50);
-		translate(50,50,0);
+		scale(50,50,50,shape);
+		translate(50,50,0,shape);
 		repaint();
 //		for (int i = 0; i < 1000;i++){
 //		System.out.println(i);

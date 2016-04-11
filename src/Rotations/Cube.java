@@ -35,6 +35,10 @@ public class Cube extends Polygon{
 		selected = tf;
 	}
 	
+	public boolean isSelected (){
+		return selected;
+	}
+	
 	public coordinate getXY(){
 		int totalX = 0;
 		int totalY = 0;

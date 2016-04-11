@@ -69,7 +69,11 @@ public class frame extends JFrame {
 			public void actionPerformed (ActionEvent arg0){
 				if (angleInput.getText().length() != 0)	
 					{angle = Integer.parseInt(angleInput.getText());}
-				gPane.rotate(modeXYZ, modeRotate, angle);
+				if (c.isSelected())	
+					gPane.rotate(modeXYZ, modeRotate, angle, c);
+				else if (c2.isSelected())
+					gPane.rotate(modeXYZ, modeRotate, angle, c2);
+					
 			}
 		});
 		
@@ -167,12 +171,23 @@ public class frame extends JFrame {
 		btnScale.addActionListener(new ActionListener(){
 			public void actionPerformed (ActionEvent arg0){
 				System.out.println("hai boi");
-				gPane.scale(Float.parseFloat(arbX.getText()), Float.parseFloat(arbY.getText()), Float.parseFloat(arbZ.getText()));
+				//if a cube is selected it will scale it
+				if (c.isSelected()){
+					gPane.scale(Float.parseFloat(arbX.getText()), Float.parseFloat(arbY.getText()), Float.parseFloat(arbZ.getText()), c);
+				}
+				else if (c2.isSelected()){
+					gPane.scale(Float.parseFloat(arbX.getText()), Float.parseFloat(arbY.getText()), Float.parseFloat(arbZ.getText()), c2);
+				}
 			}
 		});
 		btnTranslate.addActionListener(new ActionListener(){
 			public void actionPerformed (ActionEvent arg0){
-				gPane.translate(Float.parseFloat(arbX.getText()), Float.parseFloat(arbY.getText()), Float.parseFloat(arbZ.getText()));
+				if (c.isSelected()){
+					gPane.translate(Float.parseFloat(arbX.getText()), Float.parseFloat(arbY.getText()), Float.parseFloat(arbZ.getText()), c);
+				}
+				else if (c2.isSelected()){
+					gPane.translate(Float.parseFloat(arbX.getText()), Float.parseFloat(arbY.getText()), Float.parseFloat(arbZ.getText()), c2);
+				}
 			}
 		});
 		
